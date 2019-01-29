@@ -4,9 +4,10 @@ var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
 
-var indexRouter = require('./routes/index');
-var usersRouter = require('./routes/users');
-var setRouter = require('./routes/set');
+// var indexRouter = require('./routes/index');
+// var usersRouter = require('./routes/users');
+// var setRouter = require('./routes/set');
+
 
 var app = express();
 
@@ -18,12 +19,16 @@ app.use(logger('dev'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
-app.use(express.static(path.join(__dirname, 'public'))); // windodws 와 linux 계열간에 경로 호환되게 해줌.
 
+
+app.use('/api', require('./routes/api')); // 최우선 적용
+//app.use(express.static(path.join(__dirname, 'public'))); // windodws 와 linux 계열간에 경로 호환되게 해줌.
+app.use(express.static(path.join(__dirname, '../', 'fe', 'dist')));
+ 
 // 아래는 순서대로 처리됨.
-app.use('/', indexRouter);
-app.use('/users', usersRouter);
-app.use('/set', setRouter);
+// app.use('/', indexRouter);
+// app.use('/users', usersRouter);
+// app.use('/set', setRouter);
 
 // 여기까지 경로에 페이지 없으면 아래로 내려가서 404 에러 처리
 

@@ -1,5 +1,5 @@
 <template>
   <div class="about">
-    <h1>This is an NEMV about page. </h1>
+    <h1>This is a HELP page. </h1>
   </div>
 </template>
