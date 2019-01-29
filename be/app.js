@@ -25,7 +25,7 @@ app.use('/', indexRouter);
 app.use('/users', usersRouter);
 app.use('/set', setRouter);
 
-// 여기까지 경로 없으면 아래로 내려가서 에러 처리
+// 여기까지 경로에 페이지 없으면 아래로 내려가서 404 에러 처리
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) { // next는 다음으로 보내줌.
