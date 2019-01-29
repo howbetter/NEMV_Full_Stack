@@ -3,6 +3,8 @@ var express = require('express');
 var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
+// history 기능 추가 : 참고 https://github.com/bripkens/connect-history-api-fallback
+var history = require('connect-history-api-fallback');
 
 // var indexRouter = require('./routes/index');
 // var usersRouter = require('./routes/users');
@@ -20,8 +22,8 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 
-
 app.use('/api', require('./routes/api')); // 최우선 적용
+app.use(history()); // history 적용
 //app.use(express.static(path.join(__dirname, 'public'))); // windodws 와 linux 계열간에 경로 호환되게 해줌.
 app.use(express.static(path.join(__dirname, '../', 'fe', 'dist')));
  
