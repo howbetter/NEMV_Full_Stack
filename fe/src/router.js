@@ -27,6 +27,11 @@ export default new Router({
       component: () => import('./views/Help.vue')
     },
     {
+      path: '/user',
+      name: '사용자',
+      component: () => import('./views/user.vue')
+    },
+    {
       path: '*',
       name: 'e404',
       component: () => import('./views/e404.vue')

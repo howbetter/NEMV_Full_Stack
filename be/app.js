@@ -4,23 +4,24 @@ var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
 // history 기능 추가 : 참고 https://github.com/bripkens/connect-history-api-fallback
-var history = require('connect-history-api-fallback');
-
-// var indexRouter = require('./routes/index');
-// var usersRouter = require('./routes/users');
-// var setRouter = require('./routes/set');
-
+const history = require('connect-history-api-fallback');
+// CORS 추가 Access-Control-Allow-Origin 문제 해결
+const cors = require('cors');
 
 var app = express();
 
+// view는 사용하지 않을 것. front 부분은 vue 사용
 // view engine setup
-app.set('views', path.join(__dirname, 'views'));
-app.set('view engine', 'pug');
+// app.set('views', path.join(__dirname, 'views'));
+// app.set('view engine', 'pug');
 
 app.use(logger('dev'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
+
+// CORS 사용
+app.use(cors());
 
 app.use('/api', require('./routes/api')); // 최우선 적용
 app.use(history()); // history 적용
@@ -47,7 +48,9 @@ app.use(function(err, req, res, next) {
 
   // render the error page
   res.status(err.status || 500);
-  res.render('error');
+  //res.render('error');
+  // render 하지 말고 화며네 에러 출력
+  res.send({ msg: err.message});
 });
 
 module.exports = app;

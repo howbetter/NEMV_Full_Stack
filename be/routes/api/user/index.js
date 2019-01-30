@@ -4,11 +4,22 @@ var createError = require('http-errors');
 
 /* GET users listing. */
 
-router.get('/hello', function(req, res, next) {
-  res.send({ msg: 'hello', a: 1 });
+router.get('/', function(req, res, next) {
+  const us = [
+    {
+      name: "김씨",
+      age: 22
+    },
+    {
+      name: "이씨",
+      age: 33
+    }
+  ]
+  res.send({
+    users: us
+  })
 });
 
-router.use('/user', require('./user'));
 
 
 router.all('*', function(req, res, next) {
@@ -17,3 +28,4 @@ router.all('*', function(req, res, next) {
 });
 
 module.exports = router;
+ 
