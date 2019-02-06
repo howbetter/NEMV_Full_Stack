@@ -29,7 +29,7 @@ export default new Router({
     {
       path: '/user',
       name: '사용자',
-      component: () => import('./views/user.vue')
+      component: () => import('./views/User.vue')
     },
     {
       path: '*',

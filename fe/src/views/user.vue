@@ -100,11 +100,11 @@ export default {
     // 입력 용도
     postReq () {
       axios.post('http://localhost:3000/api/user', {
-        user: 'postMan'
+        name: '가정', age: 40
       })
         .then((r) => {
           this.postMd = JSON.stringify(r.data)
-          console.log(r)
+          console.log(r)  
         })
         .catch((e) => {
           console.error(e.message)

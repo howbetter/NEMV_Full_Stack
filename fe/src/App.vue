@@ -79,27 +79,34 @@ export default {
       drawer: true,
       fixed: false,
       items: [
-      {
-        icon: 'bubble_chart',
-        title: 'Inspire',
-        to: {
-          path: '/'
-        }
-      },
-      {
-        icon: 'home',
-        title: 'About',
-        to: {
-          path: '/about'
-        }
-      },
-      {
-        icon: 'help',
-        title: 'Help',
-        to: {
-          path: '/help'
-        }
-      }],
+        {
+          icon: 'bubble_chart',
+          title: 'Inspire',
+          to: {
+            path: '/'
+          }
+        },
+        {
+          icon: 'bubble_chart',
+          title: 'User',
+          to: {
+            path: '/user'
+          }
+        },
+        {
+          icon: 'home',
+          title: 'About',
+          to: {
+            path: '/about'
+          }
+        },
+        {
+          icon: 'help',
+          title: 'Help',
+          to: {
+            path: '/help'
+          }
+        }],
       miniVariant: false,
       right: true,
       rightDrawer: false,

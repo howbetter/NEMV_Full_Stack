@@ -1,31 +1,33 @@
 var express = require('express');
 var router = express.Router();
 var createError = require('http-errors');
-
-
-const us = [
-  {
-    name: "김씨",
-    age: 22
-  },
-  {
-    name: "이씨",
-    age: 33
-  }
-];
+const User = require('../../../models/users');
 
 /* GET users listing. */
 
 router.get('/', function(req, res, next) {
   console.log(req.query)
   console.log(req.body)
-  res.send({ users: us })
+  //res.send({ users: us })
+  User.find()
+    .then(r => {
+      res.send({ success: true, user: r })
+    })
+    .catch(e => {
+      res.send({ success: false })
+    })
 });
 
 router.post('/', (req, res, next) => {
-  console.log(req.query)
-  console.log(req.body)
-  res.send({ success: true, msg: 'post ok' })
+  const { name, age } = req.body
+  const u = new User({ name, age })
+  u.save().
+    then(r => {
+      res.send({ success: true, msg: r})
+    })
+    .catch(e => {
+      res.send({ success: false, msg: e })
+    })
 })
 
 router.put('/', (req, res, next) => {

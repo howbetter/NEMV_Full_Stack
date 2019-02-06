@@ -49,8 +49,34 @@ app.use(function(err, req, res, next) {
   // render the error page
   res.status(err.status || 500);
   //res.render('error');
-  // render 하지 말고 화며네 에러 출력
+  // render 하지 말고 화면에 에러 출력
   res.send({ msg: err.message});
 });
 
 module.exports = app;
+
+const mongoose = require('mongoose');
+
+const User = require('./models/users');
+
+// User.create({ name: '사람2', age: 30 })
+
+mongoose.connect('mongodb://localhost:27017/nemv', (err) => {
+  if (err) return console.err(err);
+  console.log('mongoose connected!');
+//  User.find()
+//    .then(r => console.log(r))
+//    .catch(e => console.error(e))
+//  User.deleteOne({ name: '이름테스트'})
+//    .then(r => console.log(r))
+//    .catch(e => console.error(e))
+  // db 초기화
+  User.deleteMany()
+    .then(r => console.log(r))
+    .catch(e => console.error(e))
+});
+
+
+
+
+
