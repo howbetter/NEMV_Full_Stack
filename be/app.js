@@ -56,7 +56,6 @@ app.use(function(err, req, res, next) {
 module.exports = app;
 
 const mongoose = require('mongoose');
-
 const User = require('./models/users');
 
 // User.create({ name: '사람2', age: 30 })
@@ -75,8 +74,3 @@ mongoose.connect('mongodb://localhost:27017/nemv', (err) => {
     .then(r => console.log(r))
     .catch(e => console.error(e))
 });
-
-
-
-
-

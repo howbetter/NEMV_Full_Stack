@@ -21,8 +21,8 @@ router.get('/', function(req, res, next) {
 router.post('/', (req, res, next) => {
   const { name, age } = req.body
   const u = new User({ name, age })
-  u.save().
-    then(r => {
+  u.save()
+    .then(r => {
       res.send({ success: true, msg: r})
     })
     .catch(e => {
@@ -30,16 +30,31 @@ router.post('/', (req, res, next) => {
     })
 })
 
-router.put('/', (req, res, next) => {
+router.put('/:id', (req, res, next) => {
+  const id = req.params.id
   console.log(req.query)
-  console.log(req.body)
-  res.send({ success: true, msg: 'put ok' })
-})
+  // console.log(req.body)
+  // res.send({ success: true, msg: 'put ok' })
+  User.updateOne({ _id:id }, { $set: { name, age }}).then(r => {
+      res.send({ success: true, msg: r})
+    })
+    .catch(e => {
+      res.send({ success: false, msg: e })
+    })
+}) 
 
-router.delete('/', (req, res, next) => {
+router.delete('/:id', (req, res, next) => {
+  const id = req.params.id
   console.log(req.query)
-  console.log(req.body)
-  res.send({ success: true, msg: 'delete ok' })
+  // console.log(req.body)
+  // res.send({ success: true, msg: 'delete ok' })
+  User.deleteOne({ _id:id })
+    .then(r => {
+      res.send({ success: true, msg: r})
+    })
+    .catch(e => {
+      res.send({ success: false, msg: e })
+    })
 })
 
 
