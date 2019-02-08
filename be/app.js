@@ -20,8 +20,8 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 
-// CORS 사용
-app.use(cors());
+// dev 모드일 때 CORS 사용
+if(process.env.NODE_ENV !== 'production') app.use(cors());
 
 app.use('/api', require('./routes/api')); // 최우선 적용
 app.use(history()); // history 적용
@@ -74,3 +74,4 @@ mongoose.connect('mongodb://localhost:27017/nemv', (err) => {
     .then(r => console.log(r))
     .catch(e => console.error(e))
 });
+console.log(process.env.NODE_ENV)

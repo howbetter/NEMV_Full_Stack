@@ -169,7 +169,7 @@ export default {
   methods: {
     // 조회용도
     getReq () {
-      axios.get('http://localhost:3000/api/user', {
+      axios.get(`${this.$apiRootPath}user`, {
         user: 'getMan'
       })
         .then((r) => {
@@ -182,7 +182,7 @@ export default {
     },
     // 입력 용도
     postReq () {
-      axios.post('http://localhost:3000/api/user', {
+      axios.post(`${this.$apiRootPath}user`, {
         name: '가정', age: 40
       })
         .then((r) => {
@@ -194,7 +194,7 @@ export default {
         })
     },
     putReq () {
-      axios.put('http://localhost:3000/api/user', {
+      axios.put(`${this.$apiRootPath}user`, {
         user: 'putMan'
       })
         .then((r) => {
@@ -206,7 +206,7 @@ export default {
         })
     },
     delReq () {
-      axios.delete('http://localhost:3000/api/user', {
+      axios.delete(`${this.$apiRootPath}user`, {
         user: 'delMan'
       })
         .then((r) => {
@@ -227,7 +227,7 @@ export default {
       console.log(this.userName, this.userAge)
       this.dialog = false
       this.pop(this.userName)
-      axios.post('http://localhost:3000/api/user', {
+      axios.post(`${this.$apiRootPath}user`, {
         name: this.userName, age: this.userAge
       })
         .then((r) => {
@@ -242,7 +242,7 @@ export default {
         })
     },
     getUsers () {
-      axios.get('http://localhost:3000/api/user')
+      axios.get(`${this.$apiRootPath}user`)
         .then((r) => {
           // this.getMd = JSON.stringify(r.data)
           // console.log(r)
@@ -261,7 +261,7 @@ export default {
     },
     putUser () {
       this.dialog = false
-      axios.put(`http://localhost:3000/api/user/${this.putId}`, {
+      axios.put(`${this.$apiRootPath}user/${this.putId}`, {
         name: this.userName, age: this.userAge
       })
         .then((r) => {
@@ -275,7 +275,7 @@ export default {
         })
     },
     delUser (id) {
-      axios.delete(`http://localhost:3000/api/user/${id}`, {
+      axios.delete(`${this.$apiRootPath}user/${id}`, {
         name: this.userName, age: this.userAge
       })
         .then((r) => {
