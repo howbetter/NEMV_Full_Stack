@@ -75,5 +75,14 @@ mongoose.connect(cfg.dbUrl, (err) => {
     .catch(e => console.error(e))
 });
 console.log(process.env.NODE_ENV)
+var jwt = require('jsonwebtoken');
+const key = 'very very strong key';
+var token = jwt.sign({ id: 'admin', email: 'admin@admin.com' }, key);
+console.log(token);
 
+// verify a token symmetric - synchronous
+var decoded = jwt.verify(token, key);
+console.log(decoded);
+// { id: 'admin', email: 'admin@admin.com', iat: 1549613734 }
+console.log(new Date(decoded.iat * 1000)) // iat는 시간정보
 

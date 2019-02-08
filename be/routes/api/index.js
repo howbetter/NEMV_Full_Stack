@@ -2,7 +2,12 @@ var express = require('express');
 var router = express.Router();
 var createError = require('http-errors');
 
-/* GET users listing. */
+/* 미들웨어 */
+router.all('*', function(req, res, next) {
+  console.log(req.headers)
+  if (req.path === '/xxx') return res.send({ status: 'OK' });
+  next();
+});
 
 router.get('/hello', function(req, res, next) {
   res.send({ msg: 'hello', a: 1 });
