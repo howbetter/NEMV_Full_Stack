@@ -57,10 +57,10 @@ module.exports = app;
 
 const mongoose = require('mongoose');
 const User = require('./models/users');
+const cfg = require('../config/')
+console.log(cfg)
 
-// User.create({ name: '사람2', age: 30 })
-
-mongoose.connect('mongodb://localhost:27017/nemv', (err) => {
+mongoose.connect(cfg.dbUrl, (err) => {
   if (err) return console.err(err);
   console.log('mongoose connected!');
 //  User.find()
@@ -75,3 +75,5 @@ mongoose.connect('mongodb://localhost:27017/nemv', (err) => {
     .catch(e => console.error(e))
 });
 console.log(process.env.NODE_ENV)
+
+
