@@ -32,6 +32,11 @@ export default new Router({
       component: () => import('./views/User.vue')
     },
     {
+      path: '/header',
+      name: '헤더',
+      component: () => import('./views/header.vue')
+    },
+    {
       path: '*',
       name: 'e404',
       component: () => import('./views/e404.vue')

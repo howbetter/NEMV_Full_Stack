@@ -14,6 +14,7 @@ router.get('/hello', function(req, res, next) {
 });
 
 router.use('/user', require('./user'));
+router.use('/test', require('./test'));
 
 
 router.all('*', function(req, res, next) {
