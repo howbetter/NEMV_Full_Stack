@@ -106,7 +106,6 @@ export default {
   },
   methods: {
     getUsers () {
-      console.log('getUsers started')
       this.$axios.get(`${this.$apiRootPath}manage/user`)
         .then((r) => {
           this.users = r.data.users

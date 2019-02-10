@@ -79,21 +79,21 @@ export default {
         },
         {
           icon: 'face',
-          title: 'lv1 관리자',
+          title: 'lv1 중간 관리자',
           to: {
             path: '/lv1'
           }
         },
         {
           icon: 'face',
-          title: 'lv2 관리자',
+          title: 'lv2 일반 사용자',
           to: {
             path: '/lv2'
           }
         },
         {
           icon: 'face',
-          title: 'lv3 관리자',
+          title: 'lv3 손님',
           to: {
             path: '/lv3'
           }

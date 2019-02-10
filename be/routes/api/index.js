@@ -9,6 +9,10 @@ router.use('/manage', require('./manage'));
 
 const verifyToken = (t) => {
   return new Promise((resolve, reject) => {
+    if (!t) resolve({ id: 'guest', name: '손님', lv: 3 });
+    if ((typeof t) !== 'string') reject(new Error('문자가 아닌 토큰입니다.'));
+    // null 걸러내기
+    if (t.length < 10) resolve({ id: 'guest', name: '손님', lv: 3 });
     jwt.verify(t, cfg.secretKey, (err, v) => {
       if (err) reject(err);
       resolve(v);
@@ -24,27 +28,22 @@ router.all('*', function(req, res, next) {
   verifyToken(token)
     .then(v => {
       console.log(v);
+      req.user = v;
       next();
     })
     .catch(e => {
       res.send({ success: false, msg: e.message});
     })
-
-  // console.log(req.headers)
-  // if (req.path === '/xxx') return res.send({ status: 'OK' });
-  // next();
-});
-
-router.get('/hello', function(req, res, next) {
-  res.send({ msg: 'hello', a: 1 });
 });
 
 router.use('/user', require('./user'));
-router.use('/test', require('./test'));
 
 router.all('*', function(req, res, next) {
-  //res.send('this is api page');
-  next(createError(404, 'there is no api like that'));
+  if (req.user.lv > 2) return res.send({ success: false, msg: '권한이 없습니다.'});
+  next();
+  //next(createError(404, 'there is no api like that'));
 });
+
+router.use('/test', require('./test'));
 
 module.exports = router;
