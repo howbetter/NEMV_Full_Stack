@@ -34,12 +34,24 @@ export default new Router({
     {
       path: '/header',
       name: '헤더',
-      component: () => import('./views/header.vue')
+      component: () => import('./views/header.vue'),
+      beforeEnter: (to, from, next) => {
+        // console.log('to', to)
+        // console.log('from', from)
+        // next('/sign')
+        if (!localStorage.getItem('token')) return next('/block')
+        next()
+      }
     },
     {
       path: '/sign',
       name: '로그인 페이지',
       component: () => import('./views/sign.vue')
+    },
+    {
+      path: '/block',
+      name: '로그인 정보 없을시 차단 페이지',
+      component: () => import('./views/block.vue')
     },
     {
       path: '*',

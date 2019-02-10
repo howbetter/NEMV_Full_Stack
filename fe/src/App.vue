@@ -2,8 +2,6 @@
   <v-app>
     <v-navigation-drawer
       persistent
-      :mini-variant="miniVariant"
-      :clipped="clipped"
       v-model="drawer"
       enable-resize-watcher
       fixed
@@ -27,45 +25,31 @@
     </v-navigation-drawer>
     <v-toolbar
       app
-      :clipped-left="clipped"
     >
       <v-toolbar-side-icon @click.stop="drawer = !drawer"></v-toolbar-side-icon>
-      <v-btn icon @click.stop="miniVariant = !miniVariant">
-        <v-icon v-html="miniVariant ? 'chevron_right' : 'chevron_left'"></v-icon>
-      </v-btn>
-      <v-btn icon @click.stop="clipped = !clipped">
-        <v-icon>web</v-icon>
-      </v-btn>
-      <v-btn icon @click.stop="fixed = !fixed">
-        <v-icon>web</v-icon>
-      </v-btn>
       <v-toolbar-title v-text="title"></v-toolbar-title>
       <v-spacer></v-spacer>
-      <v-btn icon @click.stop="rightDrawer = !rightDrawer">
-        <v-icon>menu</v-icon>
-      </v-btn>
+      <v-toolbar-items>
+        <v-menu bottom left>
+          <v-btn icon slot="activator">
+            <v-icon>more_vert</v-icon>
+          </v-btn>
+          <v-list>
+            <v-list-tile v-if="!$store.state.token" @click="$router.push('sign')">
+              <v-list-tile-title>로그인</v-list-tile-title>
+            </v-list-tile>
+            <v-list-tile v-else @click="signOut">
+              <v-list-tile-title>로그아웃</v-list-tile-title>
+            </v-list-tile>
+          </v-list>
+        </v-menu>
+      </v-toolbar-items>
     </v-toolbar>
     <v-content>
       <router-view/>
     </v-content>
-    <v-navigation-drawer
-      temporary
-      :right="right"
-      v-model="rightDrawer"
-      fixed
-      app
-    >
-      <v-list>
-        <v-list-tile @click="right = !right">
-          <v-list-tile-action>
-            <v-icon>compare_arrows</v-icon>
-          </v-list-tile-action>
-          <v-list-tile-title>Switch drawer (click me)</v-list-tile-title>
-        </v-list-tile>
-      </v-list>
-    </v-navigation-drawer>
-    <v-footer :fixed="fixed" app>
-      <span>&copy; 2017</span>
+    <v-footer fixed app>
+      <span>&copy; 2019 SK Telecom // token test : {{ $store.state.token }} </span>
     </v-footer>
   </v-app>
 </template>
@@ -75,22 +59,29 @@ export default {
   name: 'App',
   data () {
     return {
-      clipped: false,
+      // clipped: false,
       drawer: true,
-      fixed: false,
+      // fixed: false,
       items: [
         {
-          icon: 'bubble_chart',
-          title: 'Inspire',
+          icon: 'home',
+          title: '홈으로',
           to: {
             path: '/'
           }
         },
         {
-          icon: 'bubble_chart',
-          title: 'User',
+          icon: 'face',
+          title: '사용자 관리',
           to: {
             path: '/user'
+          }
+        },
+        {
+          icon: 'face',
+          title: 'Header',
+          to: {
+            path: '/header'
           }
         },
         {
@@ -107,10 +98,20 @@ export default {
             path: '/help'
           }
         }],
-      miniVariant: false,
-      right: true,
-      rightDrawer: false,
-      title: this.$apiRootPath // 'Vuetify.js'
+      // miniVariant: false,
+      // right: true,
+      // rightDrawer: false,
+      title: this.$apiRootPath // 추후에 모니터링하는 노드 주소로 변경 예정
+    }
+  },
+  mounted () {
+
+  },
+  methods: {
+    signOut () {
+      // localStorage.removeItem('token')
+      this.$store.commit('delToken')
+      this.$router.push('/')
     }
   }
 }

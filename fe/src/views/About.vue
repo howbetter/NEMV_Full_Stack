@@ -1,14 +1,15 @@
+/* eslint-disable */
 <template>
-	<v-container grid-list-md text-xs-center>
+  <v-container grid-list-md text-xs-center>
     <v-textarea
           outline
           name="input-7-4"
           label="Outline textarea"
           v-model="ta"
         ></v-textarea>
-		<v-layout row wrap>
-		  <v-flex xs12 sm6 md3 v-for="x in 4">
-		  	<v-card height="100%">
+    <v-layout row wrap>
+      <v-flex xs12 sm6 md3 v-for="x in 4" :key="x">
+        <v-card height="100%">
         <v-img
           src="https://cdn.vuetifyjs.com/images/cards/sunshine.jpg"
           height="200px"
@@ -38,24 +39,23 @@
           </v-card-text>
         </v-slide-y-transition>
       </v-card>
-		  </v-flex>
-		</v-layout>	  
-	</v-container>
+      </v-flex>
+    </v-layout>
+  </v-container>
 </template>
 
 <script>
-  export default {
+export default {
   name: 'about',
   data () {
-  	return {
-  		ta: 'debug',
-  		show: false
-  	}
+    return {
+      ta: 'debug',
+      show: false
+    }
   },
   mounted () {
-  	this.ta = this.$vuetify.breakpoint
-  	console.log(this.$vuetify.breakpoint)
-
+    this.ta = this.$vuetify.breakpoint
+    // console.log(this.$vuetify.breakpoint)
   }
 }
 </script>
