@@ -42,7 +42,12 @@ export default {
   methods: {
     signIn () {
       axios.post(`${this.$apiRootPath}sign/in`, this.form)
-        .then(r => console.log(r.data))
+        .then(r => {
+          if (!r.data.success) return console.error(r.data.msg)
+          localStorage.setItem('token', r.data.token) // 로그인이 정상으로 통과하여 토큰을 받으면 아래로
+          this.$router.push('/header') // header 페이지로 이동
+          // location.href = '/header' // 위와 같은 의미.
+        })
         .catch(e => console.error(e.message))
     }
   }

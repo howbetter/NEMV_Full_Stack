@@ -3,7 +3,7 @@ var createError = require('http-errors');
 var router = express.Router();
 var jwt = require('jsonwebtoken');
 const User = require('../../../models/users');
-const cfg = require('../../../../config/')
+const cfg = require('../../../../config/');
 
 const signToken = (id, age) => {
   return new Promise((resolve, reject) => {
