@@ -4,9 +4,8 @@ var createError = require('http-errors');
 var jwt = require('jsonwebtoken');
 const cfg = require('../../../config/');
 
-
-
 router.use('/sign', require('./sign'));
+router.use('/manage', require('./manage'));
 
 const verifyToken = (t) => {
   return new Promise((resolve, reject) => {

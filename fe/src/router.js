@@ -1,8 +1,11 @@
 import Vue from 'vue'
 import Router from 'vue-router'
+import axios from 'axios'
 import Home from './views/Home.vue'
 
 Vue.use(Router)
+
+Vue.prototype.$axios = axios
 
 export default new Router({
   mode: 'history',
@@ -12,6 +15,26 @@ export default new Router({
       path: '/',
       name: 'home',
       component: Home
+    },
+    {
+      path: '/lv0',
+      name: 'lv0',
+      component: () => import('./views/lv0')
+    },
+    {
+      path: '/lv1',
+      name: 'lv1',
+      component: () => import('./views/lv1')
+    },
+    {
+      path: '/lv2',
+      name: 'lv2',
+      component: () => import('./views/lv2')
+    },
+    {
+      path: '/lv3',
+      name: 'lv3',
+      component: () => import('./views/lv3')
     },
     {
       path: '/about',
@@ -30,6 +53,11 @@ export default new Router({
       path: '/user',
       name: '사용자',
       component: () => import('./views/User.vue')
+    },
+    {
+      path: '/page',
+      name: '페이지',
+      component: () => import('./views/Page.vue')
     },
     {
       path: '/header',

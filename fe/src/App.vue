@@ -65,9 +65,37 @@ export default {
       items: [
         {
           icon: 'home',
-          title: '홈으로',
+          title: '홈',
           to: {
             path: '/'
+          }
+        },
+        {
+          icon: 'face',
+          title: 'lv0 관리자',
+          to: {
+            path: '/lv0'
+          }
+        },
+        {
+          icon: 'face',
+          title: 'lv1 관리자',
+          to: {
+            path: '/lv1'
+          }
+        },
+        {
+          icon: 'face',
+          title: 'lv2 관리자',
+          to: {
+            path: '/lv2'
+          }
+        },
+        {
+          icon: 'face',
+          title: 'lv3 관리자',
+          to: {
+            path: '/lv3'
           }
         },
         {
@@ -75,6 +103,13 @@ export default {
           title: '사용자 관리',
           to: {
             path: '/user'
+          }
+        },
+        {
+          icon: 'home',
+          title: '페이지',
+          to: {
+            path: '/page'
           }
         },
         {
