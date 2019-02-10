@@ -4,7 +4,7 @@ var createError = require('http-errors');
 
 /* 미들웨어 */
 router.all('*', function(req, res, next) {
-  console.log(req.headers)
+  // console.log(req.headers)
   if (req.path === '/xxx') return res.send({ status: 'OK' });
   next();
 });
@@ -15,6 +15,7 @@ router.get('/hello', function(req, res, next) {
 
 router.use('/user', require('./user'));
 router.use('/test', require('./test'));
+router.use('/sign', require('./sign'));
 
 
 router.all('*', function(req, res, next) {

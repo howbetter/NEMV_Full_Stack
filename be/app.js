@@ -63,28 +63,22 @@ console.log(cfg)
 mongoose.connect(cfg.dbUrl, (err) => {
   if (err) return console.err(err);
   console.log('mongoose connected!');
-//  User.find()
-//    .then(r => console.log(r))
-//    .catch(e => console.error(e))
-//  User.deleteOne({ name: '이름테스트'})
-//    .then(r => console.log(r))
-//    .catch(e => console.error(e))
   // db 초기화
-  User.deleteMany()
-    .then(r => console.log(r))
-    .catch(e => console.error(e))
+  // User.deleteMany()
+  //   .then(r => console.log(r))
+  //   .catch(e => console.error(e))
 });
 console.log(process.env.NODE_ENV)
-var jwt = require('jsonwebtoken');
-const key = 'very very strong key';
-var token = jwt.sign({ id: 'admin', email: 'admin@admin.com' }, key);
-console.log(token);
+// var jwt = require('jsonwebtoken');
+// const key = 'very very strong key';
+// var token = jwt.sign({ id: 'admin', email: 'admin@admin.com' }, key);
+// console.log(token);
 
-// verify a token symmetric - synchronous
-var decoded = jwt.verify(token, key);
-console.log(decoded);
-// { id: 'admin', email: 'admin@admin.com', iat: 1549613734 }
-console.log(new Date(decoded.iat * 1000)) // iat는 시간정보
+// // verify a token symmetric - synchronous
+// var decoded = jwt.verify(token, key);
+// console.log(decoded);
+// // { id: 'admin', email: 'admin@admin.com', iat: 1549613734 }
+// console.log(new Date(decoded.iat * 1000)) // iat는 시간정보
 
 // callback
 // User.findOne({}, (err, r ) => {

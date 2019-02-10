@@ -37,6 +37,11 @@ export default new Router({
       component: () => import('./views/header.vue')
     },
     {
+      path: '/sign',
+      name: '로그인 페이지',
+      component: () => import('./views/sign.vue')
+    },
+    {
       path: '*',
       name: 'e404',
       component: () => import('./views/e404.vue')
