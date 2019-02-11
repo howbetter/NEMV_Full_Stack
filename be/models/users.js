@@ -21,11 +21,14 @@ const User = mongoose.model('User', userSchema);
 // cfg 파일에 정의된 admin 계정 정보를 찾음. 없으면 읽어서 새로 생성
 User.findOne({ id: cfg.admin.id })
   .then((r) => {
-    if (!r) return User.create({ id: cfg.admin.id, pwd: cfg.admin.pwd, name: cfg.admin.name, lv: 0 });
+    if (!r) {
+      console.log('최초 생성')
+      return User.create({ id: cfg.admin.id, pwd: cfg.admin.pwd, name: cfg.admin.name, lv: 0 });
+    }
     return Promise.resolve(null);
   })
   .then( (r) => {
-    if (r) console.log(`admin:${r.id} created!!`);
+    if (r) console.log(`admin:${r.id} created!!`, r);
   })
   .catch((e) => {
     console.error(e.message);

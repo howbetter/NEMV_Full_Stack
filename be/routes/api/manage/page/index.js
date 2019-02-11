@@ -1,6 +1,6 @@
 var express = require('express');
-var router = express.Router();
 var createError = require('http-errors');
+var router = express.Router();
 const Page = require('../../../../models/pages');
 
 router.get('/', function(req, res, next) {

@@ -5,7 +5,6 @@ var jwt = require('jsonwebtoken');
 const cfg = require('../../../config/');
 
 router.use('/sign', require('./sign'));
-router.use('/manage', require('./manage'));
 
 const verifyToken = (t) => {
   return new Promise((resolve, reject) => {
@@ -23,11 +22,11 @@ const verifyToken = (t) => {
 /* 미들웨어 */
 router.all('*', function(req, res, next) {
   // token 검사
-  const token = req.headers.authorization;
-  console.log('token', token);
+  const token = req.headers.authorization; // string 타입으로 'null'이 들어옴
+  console.log('main routes/ token : ', token);
   verifyToken(token)
     .then(v => {
-      console.log(v);
+      console.log('main routes/ v: ', v);
       req.user = v;
       next();
     })
@@ -36,7 +35,10 @@ router.all('*', function(req, res, next) {
     })
 });
 
-router.use('/user', require('./user'));
+router.use('/page', require('./page'));
+router.use('/manage', require('./manage'));
+
+// router.use('/user', require('./user'));
 
 router.all('*', function(req, res, next) {
   if (req.user.lv > 2) return res.send({ success: false, msg: '권한이 없습니다.'});
