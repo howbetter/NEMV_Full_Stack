@@ -25,9 +25,9 @@ User.findOne({ id: cfg.admin.id })
       console.log('최초 생성')
       return User.create({ id: cfg.admin.id, pwd: cfg.admin.pwd, name: cfg.admin.name, lv: 0 });
     }
-    return Promise.resolve(null);
+    return Promise.resolve(r);
   })
-  .then( (r) => {
+  .then((r) => {
     if (r) console.log(`admin:${r.id} created!!`, r);
   })
   .catch((e) => {

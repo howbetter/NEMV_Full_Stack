@@ -1,5 +1,5 @@
 <template>
-  <v-app>
+  <v-app :dark="siteTheme">
     <v-navigation-drawer
       persistent
       v-model="drawer"
@@ -27,7 +27,7 @@
       app
     >
       <v-toolbar-side-icon @click.stop="drawer = !drawer"></v-toolbar-side-icon>
-      <v-toolbar-title v-text="title"></v-toolbar-title>
+      <v-toolbar-title v-text="siteTitle"></v-toolbar-title>
       <v-spacer></v-spacer>
       <v-toolbar-items>
         <v-menu bottom left>
@@ -35,12 +35,17 @@
             <v-icon>more_vert</v-icon>
           </v-btn>
           <v-list>
-            <v-list-tile v-if="!$store.state.token" @click="$router.push('/sign')">
-              <v-list-tile-title>로그인</v-list-tile-title>
-            </v-list-tile>
-            <v-list-tile v-else @click="signOut">
-              <v-list-tile-title>로그아웃</v-list-tile-title>
-            </v-list-tile>
+            <template>
+              <v-list-tile v-if="!$store.state.token" @click="$router.push('/sign')">
+                <v-list-tile-title>로그인</v-list-tile-title>
+              </v-list-tile>
+              <v-list-tile v-else @click="signOut">
+                <v-list-tile-title>로그아웃</v-list-tile-title>
+              </v-list-tile>
+              <v-list-tile v-if="!$store.state.token" @click="$router.push('/register')">
+                <v-list-tile-title>회원가입</v-list-tile-title>
+              </v-list-tile>
+            </template>
           </v-list>
         </v-menu>
       </v-toolbar-items>
@@ -49,7 +54,7 @@
       <router-view/>
     </v-content>
     <v-footer fixed app>
-      <span>&copy; 2019 SK Telecom // token test : {{ $store.state.token }} </span>
+      <span>{{ siteCopyright }} // token test : {{ $store.state.token }} </span>
     </v-footer>
   </v-app>
 </template>
@@ -62,6 +67,9 @@ export default {
       // clipped: false,
       drawer: true,
       // fixed: false,
+      siteTitle: 'not yet',
+      siteCopyright: '© 2019 SK Telecom',
+      siteTheme: true,
       items: [
         {
           icon: 'home',
@@ -114,6 +122,13 @@ export default {
         },
         {
           icon: 'face',
+          title: '사이트 관리',
+          to: {
+            path: '/site'
+          }
+        },
+        {
+          icon: 'face',
           title: 'Header',
           to: {
             path: '/header'
@@ -140,9 +155,18 @@ export default {
     }
   },
   mounted () {
-
+    this.getSite()
   },
   methods: {
+    getSite () {
+    // this.siteTitle = 'get site'
+      this.$axios.get('site')
+        .then(r => {
+          this.siteTitle = r.data.d.title
+          this.siteCopyright = r.data.d.copyright
+          this.siteTheme = r.data.d.theme
+        })
+    },
     signOut () {
       // localStorage.removeItem('token')
       this.$store.commit('delToken')

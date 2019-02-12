@@ -38,12 +38,10 @@ const pageCheck = (to, from, next) => {
   // return next()
   axios.post(`${apiRootPath}page`, { name: to.path.replace('/', '') }, { headers: { Authorization: localStorage.getItem('token') } })
     .then((r) => {
-      console.log('pagecheck r.data.msg : ', r.data.msg)
       if (!r.data.success) throw new Error(r.data.msg)
       next()
     })
     .catch((e) => {
-      console.error(e.message)
       next(`/block/${e.message}`)
     })
 }
@@ -107,6 +105,12 @@ export default new Router({
       beforeEnter: pageCheck
     },
     {
+      path: '/site',
+      name: '사이트',
+      component: () => import('./views/site.vue'),
+      beforeEnter: pageCheck
+    },
+    {
       path: '/header',
       name: '헤더',
       component: () => import('./views/header.vue'),
@@ -122,6 +126,11 @@ export default new Router({
       path: '/sign',
       name: '로그인 페이지',
       component: () => import('./views/sign.vue')
+    },
+    {
+      path: '/register',
+      name: '회원가입',
+      component: () => import('./views/register.vue')
     },
     {
       // 뷰 라우터에서 지원하는 동적 라우트 매칭
