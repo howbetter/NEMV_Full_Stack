@@ -12,56 +12,70 @@
               <v-card-text>
                 <form>
                   <v-text-field
-                    v-model="name"
-                    v-validate="'required|min:3|max:30'"
-                    :counter="30"
-                    :error-messages="errors.collect('name')"
-                    label="Name"
-                    data-vv-name="name"
+                    v-model="form.id"
+                    v-validate="'required|min:4|max:20'"
+                    :counter="20"
+                    :error-messages="errors.collect('id')"
+                    label="ID"
+                    data-vv-name="id"
                     required
                   ></v-text-field>
                   <v-text-field
-                    v-model="email"
-                    v-validate="'required|email'"
-                    :error-messages="errors.collect('email')"
-                    label="E-mail"
-                    data-vv-name="email"
+                    v-model="form.pwd"
+                    v-validate="'required|min:8|max:40'"
+                    :counter="40"
+                    :error-messages="errors.collect('pwd')"
+                    label="PASSWORD"
+                    data-vv-name="pwd"
+                    required
+                    type="password"
+                  ></v-text-field>
+                  <v-text-field
+                    v-model="form.name"
+                    v-validate="'required|min:1|max:40'"
+                    :counter="40"
+                    :error-messages="errors.collect('name')"
+                    label="NAME"
+                    data-vv-name="name"
                     required
                   ></v-text-field>
-                  <v-select
-                    v-model="select"
-                    v-validate="'required'"
-                    :items="items"
-                    :error-messages="errors.collect('select')"
-                    label="Select"
-                    data-vv-name="select"
-                    required
-                  ></v-select>
                   <v-checkbox
-                    v-model="checkbox"
+                    v-model="agree"
                     v-validate="'required'"
                     :error-messages="errors.collect('checkbox')"
                     value="1"
-                    label="Option"
+                    label="주의 : 패스워드가 평문으로 저장됩니다.."
                     data-vv-name="checkbox"
                     type="checkbox"
                     required
                   ></v-checkbox>
 
-                  <v-btn color="primary" @click="submit">submit</v-btn>
-                  <v-btn color="secondary" @click="clear">clear</v-btn>
+                  <v-btn color="primary" @click="submit">SIGN UP</v-btn>
+                  <v-btn color="secondary" @click="clear">CLEAR</v-btn>
                 </form>
               </v-card-text>
             </v-card>
           </v-flex>
         </v-layout>
+        <v-snackbar
+          v-model="sb.act"
+        >
+          {{ sb.msg }}
+          <v-btn
+            :color="sb.color"
+            flat
+            @click="sb.act = false"
+          >
+          Close
+          </v-btn>
+        </v-snackbar>
       </v-container>
     </v-content>
   </v-app>
 </template>
 
 <script>
-import axios from 'axios'
+import ko from 'vee-validate/dist/locale/ko'
 
 export default {
   $_veeValidate: {
@@ -69,49 +83,71 @@ export default {
   },
 
   data: () => ({
-    name: '',
-    email: '',
-    select: null,
-    items: [
-      'Item 1',
-      'Item 2',
-      'Item 3',
-      'Item 4'
-    ],
-    checkbox: null,
+    form: {
+      id: '',
+      name: '',
+      pwd: ''
+    },
+    sb: {
+      act: false,
+      color: 'warning',
+      msg: ''
+    },
+    agree: null,
     dictionary: {
       attributes: {
-        email: 'E-mail Address',
+        message: ko.messages,
         // custom attributes
-        name: '이름입니다'
+        name: '이름'
       },
       custom: {
-        name: {
-          required: () => 'Name can not be empty',
-          max: 'The name field may not be greater than 30 characters'
-          // custom messages
-        },
-        select: {
-          required: 'Select field is required'
-        }
+        // name: {
+        //   required: () => 'Name can not be empty',
+        //   max: 'The name field may not be greater than 30 characters'
+        //   // custom messages
+        // },
+        // select: {
+        //   required: 'Select field is required'
+        // }
       }
     }
   }),
 
   mounted () {
-    this.$validator.localize('en', this.dictionary)
+    this.$validator.localize('ko', this.dictionary)
   },
 
   methods: {
     submit () {
       this.$validator.validateAll()
+        .then(r => {
+          console.log(r)
+          if (!r) throw new Error('필수 항목을 다 채워주세요.')
+          return this.$axios.post('register', this.form)
+        })
+        .then(r => {
+          if (!r.data.success) this.pop('가입 실패 (서버에러)', 'warning')
+          else {
+            this.pop('회원 가입 성공', 'success')
+            this.$route.push('/sign')
+          }
+        })
+        .catch(e => {
+          console.error(e.message)
+          this.pop(e.message, 'error')
+        })
     },
     clear () {
-      this.name = ''
-      this.email = ''
-      this.select = null
-      this.checkbox = null
+      this.form.id = ''
+      this.form.pwd = ''
+      this.form.name = ''
+      this.agree = null
       this.$validator.reset()
+    },
+    pop (msg, cl) {
+      this.sb.act = true
+      this.sb.msg = msg
+      this.sb.color = cl
     }
   }
 }
