@@ -37,7 +37,7 @@ module.exports = router;*/
 var express = require('express');
 var createError = require('http-errors');
 var router = express.Router();
-const Page = require('../../../models/pages')
+const Page = require('../../../models/pages');
 
 router.post('/', function(req, res, next) {
   const { name } = req.body
@@ -51,10 +51,6 @@ router.post('/', function(req, res, next) {
       return Page.updateOne({ _id: r._id }, { $inc: { inCnt: 1 } })
     })
     .then(() => {
-    //   return Page.find()
-    // })
-    // .then((rs) => {
-    //   console.log(rs)
       res.send({ success: true, d: req.user })
     })
     .catch((e) => {

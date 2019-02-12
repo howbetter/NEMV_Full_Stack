@@ -34,6 +34,5 @@ User.findOne({ id: cfg.admin.id })
     console.error(e.message);
   })
 
-
 module.exports = User;
 
