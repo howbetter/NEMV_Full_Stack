@@ -126,10 +126,11 @@ export default {
           return this.$axios.post('register', this.form)
         })
         .then(r => {
-          if (!r.data.success) this.pop('가입 실패 (서버에러)', 'warning')
+          if (!r.data.success) this.pop(r.data.msg, 'warning')
           else {
             this.pop('회원 가입 성공', 'success')
-            this.$route.push('/sign')
+            // set timer 필요할 듯.
+            this.$router.push('/sign')
           }
         })
         .catch(e => {

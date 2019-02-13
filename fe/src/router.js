@@ -93,9 +93,9 @@ export default new Router({
       component: () => import('./views/Help.vue')
     },
     {
-      path: '/user',
+      path: '/users',
       name: '사용자',
-      component: () => import('./views/User.vue'),
+      component: () => import('./views/Users.vue'),
       beforeEnter: pageCheck
     },
     {

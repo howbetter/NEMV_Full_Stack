@@ -57,8 +57,8 @@ module.exports = app;
 
 const mongoose = require('mongoose');
 const User = require('./models/users');
-const cfg = require('../config/')
-console.log(cfg)
+const cfg = require('../config/');
+console.log(cfg);
 
 mongoose.connect(cfg.dbUrl, (err) => {
   if (err) return console.err(err);
@@ -68,7 +68,9 @@ mongoose.connect(cfg.dbUrl, (err) => {
   //   .then(r => console.log(r))
   //   .catch(e => console.error(e))
 });
-console.log(process.env.NODE_ENV)
+console.log(process.env.NODE_ENV);
+
+
 // var jwt = require('jsonwebtoken');
 // const key = 'very very strong key';
 // var token = jwt.sign({ id: 'admin', email: 'admin@admin.com' }, key);
