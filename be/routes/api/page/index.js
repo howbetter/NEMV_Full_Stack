@@ -51,7 +51,7 @@ router.post('/', function(req, res, next) {
       return Page.updateOne({ _id: r._id }, { $inc: { inCnt: 1 } })
     })
     .then(() => {
-      res.send({ success: true, d: req.user })
+      res.send({ success: true, d: req.user, token: req.token })
     })
     .catch((e) => {
       res.send({ success: false, msg: e.message })

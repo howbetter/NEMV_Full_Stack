@@ -11,7 +11,7 @@ router.get('/', function(req, res, next) {
   //res.send({ users: us })
   User.find()
     .then(r => {
-      res.send({ success: true, users: r })
+      res.send({ success: true, users: r, token: req.token })
     })
     .catch(e => {
       res.send({ success: false })
@@ -23,7 +23,7 @@ router.post('/', (req, res, next) => {
   const u = new User({ name, age })
   u.save()
     .then(r => {
-      res.send({ success: true, msg: r})
+      res.send({ success: true, msg: r, token: req.token })
     })
     .catch(e => {
       res.send({ success: false, msg: e })
@@ -36,7 +36,7 @@ router.put('/:id', (req, res, next) => {
   // console.log(req.body)
   // res.send({ success: true, msg: 'put ok' })
   User.updateOne({ _id:id }, { $set: { name, age }}).then(r => {
-      res.send({ success: true, msg: r})
+      res.send({ success: true, msg: r, token: req.token })
     })
     .catch(e => {
       res.send({ success: false, msg: e })
@@ -50,7 +50,7 @@ router.delete('/:id', (req, res, next) => {
   // res.send({ success: true, msg: 'delete ok' })
   User.deleteOne({ _id:id })
     .then(r => {
-      res.send({ success: true, msg: r})
+      res.send({ success: true, msg: r, token: req.token })
     })
     .catch(e => {
       res.send({ success: false, msg: e })
