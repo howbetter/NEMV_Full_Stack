@@ -70,6 +70,24 @@ mongoose.connect(cfg.dbUrl, (err) => {
 });
 console.log(process.env.NODE_ENV);
 
+const Board = require('./models/boards')
+const Article = require('./models/articles')
+
+// User.findOne()
+//   .then(r => console.log(r.id, r._id)) // 5c635c1fb30b92499ede1e9d
+
+
+// Board.findOne()
+//   .then(r => console.log(r.name, r._id)) // 5c661ef97bf9fe60dc17ff41
+
+// Article.create({ title: 'aaa', content: 'kkfjf', _user: '5c635c1fb30b92499ede1e9d', _board: '5c661ef97bf9fe60dc17ff41' })
+//   .then(r => console.log(r))
+
+
+Article.find({ _board: '5c661ef97bf9fe60dc17ff41'})
+  .populate('_user', 'name')
+  .populate('_board')
+  .then(r => console.log(r))
 
 // var jwt = require('jsonwebtoken');
 // const key = 'very very strong key';

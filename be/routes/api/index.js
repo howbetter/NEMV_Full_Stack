@@ -72,6 +72,5 @@ router.all('*', function(req, res, next) {
   //next(createError(404, 'there is no api like that'));
 });
 
-router.use('/test', require('./test'));
 
 module.exports = router;

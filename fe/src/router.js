@@ -94,9 +94,9 @@ export default new Router({
       component: () => import('./views/Help.vue')
     },
     {
-      path: '/users',
+      path: '/user',
       name: '사용자',
-      component: () => import('./views/Users.vue'),
+      component: () => import('./views/User.vue'),
       beforeEnter: pageCheck
     },
     {
@@ -109,6 +109,12 @@ export default new Router({
       path: '/site',
       name: '사이트',
       component: () => import('./views/site.vue'),
+      beforeEnter: pageCheck
+    },
+    {
+      path: '/manage/boards',
+      name: 'manageBoards',
+      component: () => import('./views/manage/boards'),
       beforeEnter: pageCheck
     },
     {
