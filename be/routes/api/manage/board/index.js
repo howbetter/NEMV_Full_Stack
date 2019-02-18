@@ -47,7 +47,7 @@ router.delete('/:_id', (req, res, next) => {
 })
 router.all('*', function(req, res, next) {
   //res.send('this is api page');
-  next(createError(404, '/manage/page : there is no api like that'))
+  next(createError(404, '/manage/board : there is no api like that'))
 });
 
 module.exports = router;

@@ -21,16 +21,16 @@ const verifyToken = (t) => {
   })
 }
 
-const signToken = (id, lv, name, rmb) => {
+const signToken = (_id, id, lv, name, exp) => {
   return new Promise((resolve, reject) => {
     const o = {
       issuer: cfg.jwt.issuer,
       subject: cfg.jwt.subject,
-      expiresIn: cfg.jwt.expiresIn,
-      algorithm: cfg.jwt.algorithm
+      expiresIn: cfg.jwt.expiresIn, // 3분
+      algorithm: cfg.jwt.algorithm,
+      expiresIn: exp
     }
-    if (rmb) o.expiresIn = cfg.jwt.expiresInRemember
-    jwt.sign({ id, lv, name }, cfg.jwt.secretKey, o, (err, token) => {
+    jwt.sign({ _id, id, lv, name }, cfg.jwt.secretKey, o, (err, token) => {
       if (err) reject(err)
       resolve(token)
     })
@@ -43,17 +43,21 @@ const getToken = async(t) => {
   const diff = moment(vt.exp * 1000).diff(moment(), 'seconds')
   // return vt
   console.log(diff)
-  if (diff > (vt.exp - vt.iat) / cfg.jwt.expiresInDiv) return { user: vt, token: null }
+  const expSec = (vt.exp - vt.iat)
+  console.log('diff > expSec / cfg.jwt.expiresInDiv', diff > expSec / cfg.jwt.expiresInDiv)
+  if (diff > expSec / cfg.jwt.expiresInDiv) return { user: vt, token: null }
 
-  const nt = await signToken(vt.id, vt.lv, vt.name, vt.rmb)
+  const nt = await signToken(vt._id, vt.id, vt.lv, vt.name, expSec)
+  console.log('nt : ', nt)
   vt = await verifyToken(nt)
+  console.log('vt : ', vt);
   return { user: vt, token: nt }
 }
 router.all('*', function(req, res, next) {
   // 토큰 검사
   getToken(req.headers.authorization)
     .then((v) => {
-      console.log(v)
+      console.log('v : ', v)
       req.user = v.user
       req.token = v.token
       next()
@@ -62,9 +66,9 @@ router.all('*', function(req, res, next) {
 })
 
 router.use('/page', require('./page'))
+router.use('/board', require('./board'))
 router.use('/manage', require('./manage'))
-
-// router.use('/user', require('./user'));
+router.use('/article', require('./article'))
 
 router.all('*', function(req, res, next) {
   if (req.user.lv > 2) return res.send({ success: false, msg: '권한이 없습니다.'});

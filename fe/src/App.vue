@@ -1,26 +1,72 @@
 <template>
-  <v-app :dark="siteTheme">
+  <v-app :dark="siteDark">
     <v-navigation-drawer
       persistent
       v-model="drawer"
+      :mini-variant.sync="mini"
       enable-resize-watcher
       fixed
       app
     >
+      <v-toolbar flat class="transparent">
+        <v-list class="pa-0">
+          <v-list-tile avatar>
+            <v-list-tile-avatar>
+              <img src="https://randomuser.me/api/portraits/men/85.jpg">
+              <!-- <v-badge
+                overlap
+                color="orange"
+              >
+                <v-icon
+                  slot="badge"
+                  dark
+                  small
+                >notifications</v-icon>
+                <v-icon
+                  large
+                  color="grey darken-1"
+                >
+                  account_box
+                </v-icon>
+              </v-badge> -->
+            </v-list-tile-avatar>
+            <v-list-tile-content>
+              <!-- <v-list-tile-title>{{ `${$user.name} 님 (${$user.job})` }}</v-list-tile-title> -->
+              <v-list-tile-title>관리자</v-list-tile-title>
+
+            </v-list-tile-content>
+            <v-list-tile-action>
+              <v-btn icon @click.native.stop="mini = !mini">
+                <v-icon>chevron_left</v-icon>
+              </v-btn>
+            </v-list-tile-action>
+          </v-list-tile>
+        </v-list>
+      </v-toolbar>
       <v-list>
-        <v-list-tile
-          value="true"
+        <v-list-group
           v-for="(item, i) in items"
+          v-model="item.act"
+          :prepend-icon="item.icon"
           :key="i"
-          :to="item.to"
+          no-action
         >
-          <v-list-tile-action>
-            <v-icon v-html="item.icon"></v-icon>
-          </v-list-tile-action>
-          <v-list-tile-content>
-            <v-list-tile-title v-text="item.title"></v-list-tile-title>
-          </v-list-tile-content>
-        </v-list-tile>
+          <v-list-tile slot="activator">
+            <!-- <v-list-tile-title>{{item.title}}</v-list-tile-title> -->
+            <v-list-tile-content>
+              <v-list-tile-title>{{ item.title }}</v-list-tile-title>
+            </v-list-tile-content>
+          </v-list-tile>
+          <v-list-tile
+            v-for="subItem in item.subItems"
+            :key="subItem.title"
+            :to="subItem.to"
+          >
+            <v-list-tile-content>
+              <v-list-tile-title>{{ subItem.title }}</v-list-tile-title>
+            </v-list-tile-content>
+          </v-list-tile>
+        </v-list-group>
       </v-list>
     </v-navigation-drawer>
     <v-toolbar
@@ -35,17 +81,17 @@
             <v-icon>more_vert</v-icon>
           </v-btn>
           <v-list>
-            <template>
-              <v-list-tile v-if="!$store.state.token" @click="$router.push('/sign')">
+            <template v-if="!$store.state.token">
+              <v-list-tile  @click="$router.push('/sign')">
                 <v-list-tile-title>로그인</v-list-tile-title>
               </v-list-tile>
-              <v-list-tile v-else @click="signOut">
-                <v-list-tile-title>로그아웃</v-list-tile-title>
-              </v-list-tile>
-              <v-list-tile v-if="!$store.state.token" @click="$router.push('/register')">
+              <v-list-tile  @click="$router.push('/register')">
                 <v-list-tile-title>회원가입</v-list-tile-title>
               </v-list-tile>
             </template>
+            <v-list-tile v-else @click="signOut">
+              <v-list-tile-title>로그아웃</v-list-tile-title>
+            </v-list-tile>
           </v-list>
         </v-menu>
       </v-toolbar-items>
@@ -54,7 +100,7 @@
       <router-view/>
     </v-content>
     <v-footer fixed app>
-      <span>{{ siteCopyright }} // token test : {{ $store.state.token }} </span>
+      <span>{{siteCopyright}}</span>
     </v-footer>
   </v-app>
 </template>
@@ -64,120 +110,106 @@ export default {
   name: 'App',
   data () {
     return {
-      // clipped: false,
-      drawer: true,
-      // fixed: false,
-      siteTitle: 'not yet',
-      siteCopyright: '© 2019 SK Telecom',
-      siteTheme: true,
+      drawer: null,
+      mini: false,
+      siteTitle: '로딩중',
+      siteCopyright: '로딩중',
+      siteDark: false,
       items: [
         {
           icon: 'home',
-          title: '홈',
-          to: {
-            path: '/'
-          }
+          title: '게시판 모음',
+          act: true,
+          subItems: [
+            {
+              title: '테스트',
+              to: {
+                path: '/'
+              }
+            }
+          ]
         },
         {
-          icon: 'face',
-          title: 'lv0 관리자',
-          to: {
-            path: '/lv0'
-          }
-        },
-        {
-          icon: 'face',
-          title: 'lv1 중간 관리자',
-          to: {
-            path: '/lv1'
-          }
-        },
-        {
-          icon: 'face',
-          title: 'lv2 일반 사용자',
-          to: {
-            path: '/lv2'
-          }
-        },
-        {
-          icon: 'face',
-          title: 'lv3 손님',
-          to: {
-            path: '/lv3'
-          }
-        },
-        {
-          icon: 'face',
-          title: '사용자 관리',
-          to: {
-            path: '/user'
-          }
-        },
-        {
-          icon: 'home',
-          title: '페이지',
-          to: {
-            path: '/page'
-          }
-        },
-        {
-          icon: 'face',
-          title: '사이트 관리',
-          to: {
-            path: '/site'
-          }
+          icon: 'pan_tool',
+          title: '레벨테스트',
+          subItems: [
+            {
+              title: '손님용 페이지',
+              to: {
+                path: '/lv3'
+              }
+            },
+            {
+              title: '일반유저용 페이지',
+              to: {
+                path: '/lv2'
+              }
+            },
+            {
+              title: '슈퍼유저용 페이지',
+              to: {
+                path: '/lv1'
+              }
+            },
+            {
+              title: '관리자용 페이지',
+              to: {
+                path: '/lv0'
+              }
+            }
+          ]
         },
         {
           icon: 'settings',
-          title: '게시판관리',
-          to: {
-            path: '/manage/boards'
-          }
-        },
-        {
-          icon: 'face',
-          title: 'Header',
-          to: {
-            path: '/header'
-          }
-        },
-        {
-          icon: 'home',
-          title: 'About',
-          to: {
-            path: '/about'
-          }
-        },
-        {
-          icon: 'help',
-          title: 'Help',
-          to: {
-            path: '/help'
-          }
-        }],
-      // miniVariant: false,
-      // right: true,
-      // rightDrawer: false,
-      title: this.$apiRootPath // 추후에 모니터링하는 노드 주소로 변경 예정
+          title: '관리메뉴',
+          subItems: [
+            {
+              title: '사용자관리',
+              to: {
+                path: '/User'
+              }
+            },
+            {
+              title: '페이지관리',
+              to: {
+                path: '/page'
+              }
+            },
+            {
+              title: '사이트관리',
+              to: {
+                path: '/site'
+              }
+            },
+            {
+              title: '게시판관리',
+              to: {
+                path: '/manage/boards'
+              }
+            }
+          ]
+        }
+      ],
+      title: this.$apiRootPath
     }
   },
   mounted () {
     this.getSite()
   },
   methods: {
-    getSite () {
-    // this.siteTitle = 'get site'
-      this.$axios.get('site')
-        .then(r => {
-          this.siteTitle = r.data.d.title
-          this.siteCopyright = r.data.d.copyright
-          this.siteTheme = r.data.d.theme
-        })
-    },
     signOut () {
       // localStorage.removeItem('token')
       this.$store.commit('delToken')
       this.$router.push('/')
+    },
+    getSite () {
+      this.$axios.get('/site')
+        .then(r => {
+          this.siteTitle = r.data.d.title
+          this.siteCopyright = r.data.d.copyright
+          this.siteDark = r.data.d.theme
+        })
+        .catch(e => console.error(e.message))
     }
   }
 }
