@@ -84,10 +84,10 @@ const Article = require('./models/articles')
 //   .then(r => console.log(r))
 
 
-Article.find({ _board: '5c661ef97bf9fe60dc17ff41'})
-  .populate('_user', 'name')
-  .populate('_board')
-  .then(r => console.log(r))
+// Article.find({ _board: '5c661ef97bf9fe60dc17ff41'})
+//   .populate('_user', 'name')
+//   .populate('_board')
+//   .then(r => console.log(r))
 
 // var jwt = require('jsonwebtoken');
 // const key = 'very very strong key';

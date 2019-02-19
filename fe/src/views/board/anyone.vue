@@ -13,7 +13,7 @@
                 <v-flex xs6 align-end flexbox>
                   <span class="headline">{{board.name}}</span>
                 </v-flex>
-                <v-flex xs6 align-end flexbox>
+                <v-flex xs6 align-end flexbox class="text-xs-right">
                   <span>{{board.rmk}}</span>
                 </v-flex>
               </v-layout>
@@ -21,8 +21,27 @@
           </v-img>
         </v-card>
       </v-flex>
-      <v-flex xs12 sm6 md4>
-
+      <!-- <v-flex xs12 sm6 md4 v-for="article in articles" :key="article._id">
+        {{article}}
+      </v-flex> -->
+      <v-flex xs12>
+        <v-data-table
+          :headers="headers"
+          :items="articles"
+          :total-items="itemTotal"
+          :pagination.sync="pagination"
+          rows-per-page-text=""
+          :loading="loading"
+          class="text-no-wrap"
+          disable-initial-sort>
+          <template slot="items" slot-scope="props">
+            <td :class="headers[0].class">{{ id2date(props.item._id)}}</td>
+            <td :class="headers[1].class">{{ props.item.title }}</td>
+            <td :class="headers[2].class">{{ props.item._user ? props.item._user.id : '손님' }}</td>
+            <td :class="headers[3].class">{{ props.item.cnt.view }}</td>
+            <td :class="headers[4].class">{{ props.item.cnt.like }}</td>
+          </template>
+        </v-data-table>
       </v-flex>
     </v-layout>
 
@@ -41,36 +60,26 @@
     <v-dialog v-model="dialog" persistent max-width="500px">
       <v-card>
         <v-card-title>
-          <span class="headline">게시판 추가</span>
+          <span class="headline">글 작성</span>
         </v-card-title>
         <v-card-text>
           <v-container grid-list-md>
             <v-layout wrap>
-              <v-flex xs12 sm6 md4>
+              <v-flex xs12>
                 <v-text-field
-                  label="게시판 이름"
-                  hint="당구모임"
+                  label="제목"
                   persistent-hint
                   required
-                  v-model="form.name"
+                  v-model="form.title"
                 ></v-text-field>
               </v-flex>
-              <v-flex xs12 sm6>
-                <v-text-field
-                  label="게시판 설명"
-                  hint="당구를 좋아하는 사람"
+              <v-flex xs12>
+                <v-textarea
+                  label="내용"
                   persistent-hint
                   required
-                  v-model="form.rmk"
-                ></v-text-field>
-              </v-flex>
-              <v-flex xs12 sm6>
-                <v-select
-                  :items="lvs"
-                  label="권한"
-                  required
-                  v-model="form.lv"
-                ></v-select>
+                  v-model="form.content"
+                ></v-textarea>
               </v-flex>
             </v-layout>
           </v-container>
@@ -97,29 +106,40 @@
   </v-container>
 </template>
 <script>
-// import boardCard from '@/components/manage/boardCard'
+// eslint-disable-next-line
+import boardCard from '@/components/manage/boardCard'
 export default {
-  // components: { boardCard },
+  // eslint-disable-next-line
+  components: { boardCard },
   data () {
     return {
       board: {
         name: '로딩중...',
         rmk: '무엇?'
       },
-      boards: [],
+      articles: [],
       dialog: false,
       lvs: [0, 1, 2, 3],
       form: {
-        name: '',
-        rmk: '',
-        lv: 0
+        title: '',
+        content: ''
       },
-      selected: 0,
       sb: {
         act: false,
         msg: '',
         color: 'error'
-      }
+      },
+      headers: [
+        { text: '날짜', value: '_id', sortable: true, class: 'hidden-sm-and-down' },
+        { text: '제목', value: 'title', sortable: true },
+        { text: '글쓴이', value: '_user', sortable: false },
+        { text: '조회수', value: 'cnt.view', sortable: true },
+        { text: '추천', value: 'cnt.like', sortable: true }
+      ],
+      loading: false,
+      itemTotal: 0,
+      pagination: {},
+      getTotalPage: 1
     }
   },
   mounted () {
@@ -129,9 +149,8 @@ export default {
     addDialog () {
       this.dialog = true
       this.form = {
-        name: '',
-        rmk: '',
-        lv: 0
+        title: '',
+        content: ''
       }
     },
     get () {
@@ -139,14 +158,16 @@ export default {
         .then(({ data }) => {
           if (!data.success) throw new Error(data.msg)
           this.board = data.d
+          this.list()
         })
         .catch((e) => {
           this.pop(e.message, 'error')
         })
     },
     add () {
-      if (!this.form.name) return this.pop('이름을 작성해주세요', 'warning')
-      this.$axios.post('manage/board', this.form)
+      if (!this.form.title) return this.pop('제목을 작성해주세요', 'warning')
+      if (!this.form.content) return this.pop('내용을 작성해주세요', 'warning')
+      this.$axios.post(`article/${this.board._id}`, this.form)
         .then((r) => {
           this.dialog = false
           this.list()
@@ -156,18 +177,26 @@ export default {
         })
     },
     list () {
-      this.$axios.get('manage/board')
+      if (this.loading) return
+      this.loading = true
+      this.$axios.get(`article/${this.board._id}`)
         .then(({ data }) => {
-          this.boards = data.ds
+          this.articles = data.ds
+          this.loading = false
         })
         .catch((e) => {
           this.pop(e.message, 'error')
+          this.loading = false
         })
     },
     pop (m, c) {
       this.sb.act = true
       this.sb.msg = m
       this.sb.color = c
+    },
+    id2date (val) {
+      if (!val) return '잘못된 시간 정보'
+      return new Date(parseInt(val.substring(0, 8), 16) * 1000).toLocaleString()
     }
   }
 }
